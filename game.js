@@ -1,8 +1,12 @@
-function resizeCanvasToWindow(canvas) {
-  // Match canvas internal size to window size
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+function resizeCanvasToDisplaySize(canvas) {
+  const displayWidth = canvas.clientWidth;   // CSS-computed width (e.g., calc(100% - 40px))
+  const displayHeight = canvas.clientHeight; // CSS-computed height
+  if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+  }
 }
+
 
 class Position {
   constructor(x,y) {
@@ -50,11 +54,6 @@ function drawGrid(topLeft, canvas, rows, cols, active) {
 
 }
 
-function onWindowResize(canvas) {
-  resizeCanvasToWindow(canvas);
-  drawGrid();
-}
-
 function triggerCell(pos) {
   if(active.has(pos)) {
     active.delete(pos);
@@ -70,7 +69,10 @@ const ctx = canvas.getContext("2d");
 const rows = 40;
 const cols = 40;
 
-window.addEventListener('resize', onWindowResize);
+window.addEventListener('resize', () => {
+  resizeCanvasToDisplaySize(canvas);
+  drawGrid(new Position(0,0), canvas, rows, cols, active);
+});
 
 canvas.addEventListener("click", (event) => {
   console.log("Canvas clicked", event);
@@ -91,5 +93,5 @@ const active = new Set();
 pos = new Position(3,4)
 active.add(new Position(3,4));
 
-resizeCanvasToWindow(canvas);
+resizeCanvasToDisplaySize(canvas);
 drawGrid(new Position(0,0), canvas, rows, cols, active);
