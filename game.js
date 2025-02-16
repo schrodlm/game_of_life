@@ -20,7 +20,8 @@ class Size {
 
 function getCellSize(canvas, rows, cols) {
 
-  const cellWidth = canvas.width / cols;  
+  const cellWidth = canvas.width / cols;
+  console.log(canvas.width, cols);
   const cellHeight = canvas.height / rows;
 
   return new Size(cellWidth, cellHeight);
@@ -54,6 +55,15 @@ function onWindowResize(canvas) {
   drawGrid();
 }
 
+function triggerCell(pos) {
+  if(active.has(pos)) {
+    active.delete(pos);
+  }
+  else {
+    active.add(pos);
+  }
+}
+
 //----------------------------------------------------------------------
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -64,6 +74,17 @@ window.addEventListener('resize', onWindowResize);
 
 canvas.addEventListener("click", (event) => {
   console.log("Canvas clicked", event);
+  
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  
+  const size = getCellSize(canvas, rows, cols);
+  const realX = Math.floor(x / size.width);
+  const realY = Math.floor(y / size.height);
+
+  triggerCell(new Position(realX,realY));
+  drawGrid(new Position(0,0), canvas, rows, cols, active);
 });
 
 const active = new Set();
