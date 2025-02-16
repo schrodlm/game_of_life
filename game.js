@@ -12,18 +12,17 @@ function drawGrid() {
 
   const rows = 40;
   const cols = 40;
-  let flag = false;
+  const cellSize = 10;
+  
+  const gridWidth = cols * cellSize;
+  const gridHeight = rows * cellSize;
+
+  const offsetX = (canvas.width - gridWidth) / 2;
+  const offsetY = (canvas.height - gridHeight) / 2;
+
   for(let row = 0; row < rows; row++) {
-      flag = !flag;
     for(let col = 0; col < cols; col++) {
-      if(flag){
-        ctx.fillStyle = "red";
-      }
-      else {
-        ctx.fillStyle = "blue";
-      }
-      ctx.fillRect( col*10, row*10, 10,10);
-      flag = !flag;
+      ctx.strokeRect(offsetX + col*10, offsetY + row*10, 10,10);
     }
   }
 }
