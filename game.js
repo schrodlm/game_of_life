@@ -13,6 +13,10 @@ class Position {
     this.x = x;
     this.y = y;
   }
+  // Custom method to generate a unique key for the position
+  getKey() {
+    return `${this.x},${this.y}`;
+  }
 }
 
 class Size {
@@ -37,12 +41,15 @@ function drawGrid(topLeft, canvas, rows, cols, active) {
 
   for(let row = 0; row < rows; row++) {
     for(let col = 0; col < cols; col++) {
+      ctx.fillStyle = "white";
+      ctx.fillRect(col*size.width,row*size.height, size.width,size.height);
+      ctx.fillStyle = "black";
       ctx.strokeRect(col*size.width,row*size.height, size.width,size.height);
     }
   }
 
   // Looping through active cells
-  for(const pos of active) {
+  for(const [key,pos] of active) {
     const realX = pos.x - topLeft.x;
     const realY = pos.y - topLeft.y;
 
@@ -55,11 +62,11 @@ function drawGrid(topLeft, canvas, rows, cols, active) {
 }
 
 function triggerCell(pos) {
-  if(active.has(pos)) {
-    active.delete(pos);
+  if(active.has(pos.getKey())) {
+    active.delete(pos.getKey());
   }
   else {
-    active.add(pos);
+    active.set(pos.getKey(), pos);
   }
 }
 
@@ -89,9 +96,8 @@ canvas.addEventListener("click", (event) => {
   drawGrid(new Position(0,0), canvas, rows, cols, active);
 });
 
-const active = new Set();
+const active = new Map();
 pos = new Position(3,4)
-active.add(new Position(3,4));
 
 resizeCanvasToDisplaySize(canvas);
 drawGrid(new Position(0,0), canvas, rows, cols, active);
