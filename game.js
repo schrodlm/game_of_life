@@ -11,14 +11,28 @@ class Position {
   }
 }
 
-function drawGrid(topLeft, canvas, rows, cols, active) {
-  
+class Size {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+}
+
+function getCellSize(canvas, rows, cols) {
+
   const cellWidth = canvas.width / cols;  
   const cellHeight = canvas.height / rows;
 
+  return new Size(cellWidth, cellHeight);
+}
+
+function drawGrid(topLeft, canvas, rows, cols, active) {
+  
+  const size = getCellSize(canvas, rows, cols);
+
   for(let row = 0; row < rows; row++) {
     for(let col = 0; col < cols; col++) {
-      ctx.strokeRect(col*cellWidth,row*cellHeight, cellWidth,cellHeight);
+      ctx.strokeRect(col*size.width,row*size.height, size.width,size.height);
     }
   }
 
@@ -28,7 +42,7 @@ function drawGrid(topLeft, canvas, rows, cols, active) {
     const realY = pos.y - topLeft.y;
 
     if(realX >= 0 && realX < cols && realY >= 0 && realY < rows) {
-      ctx.fillRect(realX*cellWidth, realY*cellHeight, cellWidth, cellHeight);
+      ctx.fillRect(realX*size.width, realY*size.height, size.width, size.height);
     } 
   }
 
@@ -47,6 +61,10 @@ const rows = 40;
 const cols = 40;
 
 window.addEventListener('resize', onWindowResize);
+
+canvas.addEventListener("click", (event) => {
+  console.log("Canvas clicked", event);
+});
 
 const active = new Set();
 pos = new Position(3,4)
