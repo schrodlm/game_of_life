@@ -1,19 +1,11 @@
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
 function resizeCanvasToWindow(canvas) {
   // Match canvas internal size to window size
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
 
-function drawGrid() {
+function drawGrid(rows, cols, cellSize) {
 
-  const rows = 40;
-  const cols = 40;
-  const cellSize = 10;
-  
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
 
@@ -27,12 +19,19 @@ function drawGrid() {
   }
 }
 
-function onWindowResize() {
+function onWindowResize(canvas) {
   resizeCanvasToWindow(canvas);
   drawGrid();
 }
+//----------------------------------------------------------------------
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const rows = 40;
+const cols = 40;
+const cellSize = 10;
 
 window.addEventListener('resize', onWindowResize);
 
+
 resizeCanvasToWindow(canvas);
-drawGrid();
+drawGrid(canvas);
