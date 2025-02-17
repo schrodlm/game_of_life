@@ -70,15 +70,18 @@ function triggerCell(pos) {
   }
 }
 
+//-----------------------------event listeners--------------------------
+
 //----------------------------------------------------------------------
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const rows = 40;
 const cols = 40;
+top_left = new Position(0,0);
 
 window.addEventListener('resize', () => {
   resizeCanvasToDisplaySize(canvas);
-  drawGrid(new Position(0,0), canvas, rows, cols, active);
+  drawGrid(top_left, canvas, rows, cols, active);
 });
 
 canvas.addEventListener("click", (event) => {
@@ -93,11 +96,9 @@ canvas.addEventListener("click", (event) => {
   const realY = Math.floor(y / size.height);
 
   triggerCell(new Position(realX,realY));
-  drawGrid(new Position(0,0), canvas, rows, cols, active);
+  drawGrid(top_left, canvas, rows, cols, active);
 });
 
 const active = new Map();
-pos = new Position(3,4)
-
 resizeCanvasToDisplaySize(canvas);
-drawGrid(new Position(0,0), canvas, rows, cols, active);
+drawGrid(top_left, canvas, rows, cols, active);

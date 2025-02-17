@@ -7,12 +7,15 @@
   </head>
   <body>
     <h1> Conway's Game of Life </h1>
+    <p> Top left: </p> <p id="coords-output"></p>
     <div id="canvas-container">
       <canvas id="gameCanvas" margin=20px ></canvas>
     </div>
     <div id="controls">
       <button id="startBtn">Start</button>
       <button id="pauseBtn"> Pause </button>
+      <label for="Coords"> Coords: </label>
+      <input type="string" id="coords-input" placeholder="(x,y)">
     </div>
     <script src="game.js"></script>
   </body>
