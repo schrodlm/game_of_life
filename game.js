@@ -74,6 +74,7 @@ function triggerCell(pos) {
 
 //----------------------------------------------------------------------
 const canvas = document.getElementById("gameCanvas");
+const top_left_output = document.getElementById("coords-output");
 const ctx = canvas.getContext("2d");
 const rows = 40;
 const cols = 40;
@@ -102,3 +103,4 @@ canvas.addEventListener("click", (event) => {
 const active = new Map();
 resizeCanvasToDisplaySize(canvas);
 drawGrid(top_left, canvas, rows, cols, active);
+top_left_output.textContent = top_left.x + "," + top_left.y;
