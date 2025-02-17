@@ -70,11 +70,32 @@ function triggerCell(pos) {
   }
 }
 
-//-----------------------------event listeners--------------------------
+function updateTopLeft(topLeft, top_left_output, top_left_input) {
+  //parse top_left_output
+  const parsed_new_top_left = top_left_input.value.split(',');
+  if(parsed_new_top_left.length == 2) {
+    const x = Number(parsed_new_top_left[0]);
+    const y = Number(parsed_new_top_left[1]);
+    //everything is valid
+    if(!Number.isNaN(x) && !Number.isNaN(y)) {
+      const newTopLeft = new Position(x,y);
+      topLeft.x = newTopLeft.x;
+      topLeft.y = newTopLeft.y;
+      top_left_output.textContent = x + "," + y;
+      drawGrid(topLeft, canvas, rows, cols, active);
+    } else {
+      top_left_output.textContent = "Invalid input: x and y must be number";
+    }
+  } else {
+    top_left_output.textContent = "Invalid input: expected format 'x,y'";
+  }
+}
 
 //----------------------------------------------------------------------
 const canvas = document.getElementById("gameCanvas");
 const top_left_output = document.getElementById("coords-output");
+const top_left_input = document.getElementById("coords-input");
+const top_left_submit_btm = document.getElementById("coords-submit-btn");
 const ctx = canvas.getContext("2d");
 const rows = 40;
 const cols = 40;
@@ -93,12 +114,20 @@ canvas.addEventListener("click", (event) => {
   const y = event.clientY - rect.top;
   
   const size = getCellSize(canvas, rows, cols);
-  const realX = Math.floor(x / size.width);
-  const realY = Math.floor(y / size.height);
+  const realX = Math.floor(x / size.width) + top_left.x;
+  const realY = Math.floor(y / size.height) + top_left.y;
 
   triggerCell(new Position(realX,realY));
+  console.log(top_left);
   drawGrid(top_left, canvas, rows, cols, active);
 });
+
+top_left_submit_btm.addEventListener('click', () => {
+  //get the new coords from input field
+  const input = top_left_input.value;
+
+  updateTopLeft(top_left, top_left_output, top_left_input);
+})
 
 const active = new Map();
 resizeCanvasToDisplaySize(canvas);
